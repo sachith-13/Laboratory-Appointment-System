@@ -54,6 +54,8 @@
             </a>
 
 
+
+
             <a href="/login"th:action="@{/logout}" method="post">
                     <span class="material-icons-sharp">
                         logout
@@ -67,13 +69,30 @@
     <!-- Main Content -->
     <main>
         <div class="new-users">
-            <h2>Your Bookings</h2>
+            <h2>View Test Result</h2>
             <div class="user-list">
                 <head>
                     <title></title>
                 </head>
                 <body onload="setMinDate()">
                 <div>
+
+                    <h1>Download Test Result</h1>
+                    <form id="downloadForm" action="/api/test-results/download" method="get">
+                        <label for="downloadBookingId">Enter Booking ID:</label>
+                        <input type="text" id="downloadBookingId" name="bookingId" required><br><br>
+                        <button type="submit">Download</button>
+                    </form>
+
+                    <script>
+
+                        document.getElementById("downloadForm").addEventListener("submit", function(event) {
+                            event.preventDefault();
+                            var bookingId = document.getElementById("downloadBookingId").value;
+                            window.location.href = "/api/test-results/download/" + bookingId;
+                        });
+
+                    </script>
 
 
                 </div>

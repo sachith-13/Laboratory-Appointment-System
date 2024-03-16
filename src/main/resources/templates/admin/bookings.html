@@ -69,7 +69,6 @@
 
 
 
-
                 <a href="/login"th:action="@{/logout}" method="post">
                     <span class="material-icons-sharp">
                         logout
@@ -83,13 +82,36 @@
         <!-- Main Content -->
         <main>
             <div class="new-users">
-                <h2>Dashboard</h2>
+                <h2>Bookings</h2>
                 <div class="user-list">
                     <head>
                         <title></title>
                     </head>
 
-
+                    <div>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Time Slot</th>
+                                <th>Booking Date</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="booking : ${bookings}">
+                                <td th:text="${booking.userId}">User ID</td>
+                                <td th:text="${booking.timeSlot}">Time Slot</td>
+                                <td th:text="${booking.bookingDate}">Booking Date</td>
+                                <td>
+                                    <form th:action="@{'/admin/bookings/' + ${booking.id} + '/cancel'}" th:method="post">
+                                        <input type="hidden" name="_method" value="DELETE"/>
+                                        <button type="submit">Cancel</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
 
 

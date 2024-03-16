@@ -2,12 +2,14 @@ package com.djamware.springsecuritymongo.controllers;
 
 import com.djamware.springsecuritymongo.domain.Booking;
 import com.djamware.springsecuritymongo.services.BookingService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
@@ -22,11 +24,11 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    @GetMapping("user/bookings")
+    @GetMapping("admin/bookings")
     public String showBookings(Model model) {
         List<Booking> bookings = bookingService.getAllBookings();
         model.addAttribute("bookings", bookings);
-        return "user/bookings"; // Assuming your Thymeleaf template is named "bookings.html"
+        return "admin/bookings"; // Assuming your Thymeleaf template is named "bookings.html"
     }
 
 
@@ -55,16 +57,16 @@ public class BookingController {
             redirectAttributes.addFlashAttribute("errorMessage", "Error while processing booking.");
         }
 
-        return "redirect:/user/bookings"; // Redirect to the dashboard after booking attempt
+        return "redirect:/user/dashboard"; // Redirect to the dashboard after booking attempt
     }
 
 
 
-    @PostMapping("user/bookings/{bookingId}/cancel")
+    @PostMapping("admin/bookings/{bookingId}/cancel")
     public String cancelBooking(@PathVariable("bookingId") String bookingId) {
         bookingService.cancelBooking(bookingId);
         // Redirect to the dashboard or any other page after canceling the booking
-        return "redirect:/user/bookings";
+        return "redirect:/admin/bookings";
     }
 
 

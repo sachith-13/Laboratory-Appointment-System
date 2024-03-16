@@ -83,11 +83,61 @@
         <!-- Main Content -->
         <main>
             <div class="new-users">
-                <h2>Dashboard</h2>
+                <h2>Users</h2>
                 <div class="user-list">
                     <head>
-                        <title></title>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Upload Test Result</title>
                     </head>
+                    <body>
+                    <h1>Upload Test Result</h1>
+                    <form id="uploadForm">
+                        <label for="bookingId">Booking ID:</label>
+                        <input type="text" id="bookingId" name="bookingId" required><br><br>
+                        <label for="result">Test Result:</label>
+                        <input type="text" id="result" name="result"><br><br>
+                        <input type="file" id="file" name="file" required accept=".pdf"><br><br>
+                        <button type="submit">Upload</button>
+                    </form>
+                    <hr>
+                    <h1>View Test Result</h1>
+                    <h2>Download Test Result</h2>
+                    <form id="downloadForm" action="/api/test-results/download" method="get">
+                        <label for="downloadBookingId">Enter Booking ID:</label>
+                        <input type="text" id="downloadBookingId" name="bookingId" required><br><br>
+                        <button type="submit">Download</button>
+                    </form>
+
+                    <script>
+                        document.getElementById("uploadForm").addEventListener("submit", function (event) {
+                            event.preventDefault();
+                            let formData = new FormData();
+                            formData.append('bookingId', document.getElementById("bookingId").value);
+                            formData.append('result', document.getElementById("result").value);
+                            formData.append('file', document.getElementById("file").files[0]);
+                            fetch('/api/test-results/upload', {
+                                method: 'POST',
+                                body: formData
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    alert("Test result uploaded successfully!");
+                                    document.getElementById("bookingId").value = "";
+                                    document.getElementById("result").value = "";
+                                    document.getElementById("file").value = "";
+                                })
+                                .catch(error => console.error('Error:', error));
+                        });
+
+                        document.getElementById("downloadForm").addEventListener("submit", function(event) {
+                            event.preventDefault();
+                            var bookingId = document.getElementById("downloadBookingId").value;
+                            window.location.href = "/api/test-results/download/" + bookingId;
+                        });
+
+                    </script>
+                    </body>
 
 
 

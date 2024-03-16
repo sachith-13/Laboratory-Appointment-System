@@ -32,6 +32,8 @@ public class SpringsecuritymongoApplication {
                 newUserRole.setRole("USER");
                 roleRepository.save(newUserRole);
             }
+
+
         };
 
     }

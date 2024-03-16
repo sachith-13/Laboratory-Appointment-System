@@ -4,15 +4,15 @@ import com.djamware.springsecuritymongo.domain.Booking;
 import com.djamware.springsecuritymongo.repositories.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-
 @Service
 public class BookingService {
 
     private final BookingRepository bookingRepository;
+
+
 
     @Autowired
     public BookingService(BookingRepository bookingRepository) {

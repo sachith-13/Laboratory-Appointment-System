@@ -48,7 +48,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/admin/dashboard").hasAuthority("ADMIN")
                 .antMatchers("/user/dashboard").hasAuthority("USER")
-                .antMatchers("user/bookings").authenticated() // Authorization rule for /bookings
+                .antMatchers("user/bookings").authenticated()
+                .antMatchers("user/testresult").authenticated()
+                .antMatchers("admin/users").authenticated()
+                .antMatchers("admin/labs").authenticated()
+                .antMatchers("admin/bookings").authenticated()
+                .antMatchers("admin/testresults").authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable()

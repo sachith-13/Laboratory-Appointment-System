@@ -28,10 +28,17 @@ public class PageConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/home").setViewName("home");
         registry.addViewController("/").setViewName("home");
-        registry.addViewController("/admin/dashboard").setViewName("admin/dashboard");
-        registry.addViewController("/user/dashboard").setViewName("user/dashboard");
         registry.addViewController("/login").setViewName("login");
+
+        registry.addViewController("/admin/dashboard").setViewName("admin/dashboard");
+        registry.addViewController("/admin/labs").setViewName("admin/labs");
+        registry.addViewController("/admin/users").setViewName("admin/users");
+        registry.addViewController("/admin/bookings").setViewName("admin/bookings");
+        registry.addViewController("/admin/testresults").setViewName("admin/testresults");
+
+        registry.addViewController("/user/dashboard").setViewName("user/dashboard");
         registry.addViewController("/user/bookings").setViewName("user/bookings");
+        registry.addViewController("/user/testresult").setViewName("user/testresult");
     }
 
 }
