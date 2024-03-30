@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en"
+        xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+            <meta charset="UTF-8">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <title>Responsive Dashboard Design #1 | AsmrProg</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Sidebar Section -->
+        <aside>
+            <div class="toggle">
+                <div class="logo">
+                    <img src="/images/logo.png">
+                    <h2>SD<span class="danger">Lab</span></h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-icons-sharp">
+                        close
+                    </span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <a href="/user/dashboard">
+                    <span class="material-icons-sharp">
+                        dashboard
+                    </span>
+                    <h3>Book a time</h3>
+                </a>
+
+                <a href="/user/bookings">
+                    <span class="material-icons-sharp">
+                        receipt_long
+                    </span>
+                    <h3>Your Bookings</h3>
+                </a>
+
+                <a href="/user/testresult">
+                    <span class="material-icons-sharp">
+                        mail_outline
+                    </span>
+                    <h3>Test Result</h3>
+                    <span class="message-count"></span>
+                </a>
+
+
+
+
+                <a href="/login"th:action="@{/logout}" method="post">
+                    <span class="material-icons-sharp">
+                        logout
+                    </span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+        <!-- End of Sidebar Section -->
+
+        <!-- Main Content -->
+        <main>
+            <div class="new-users">
+                <h2>Book a time</h2>
+                <div class="user-list">
+                    <head>
+                        <title>Booking Form</title>
+                    </head>
+                    <body onload="setMinDate()">
+                    <h2>Book a Time Slot</h2>
+                    <script>
+                        function setMinDate() {
+                            var today = new Date();
+                            var nextDay = new Date(today);
+                            nextDay.setDate(today.getDate() + 1); // Next day
+
+                            var dd = String(nextDay.getDate()).padStart(2, '0');
+                            var mm = String(nextDay.getMonth() + 1).padStart(2, '0'); //January is 0!
+                            var yyyy = nextDay.getFullYear();
+
+                            nextDay = yyyy + '-' + mm + '-' + dd;
+                            document.getElementById("bookingDate").setAttribute("min", nextDay);
+
+
+                        }
+
+
+                    </script>
+
+                    <form action="/book" method="post">
+                        <label for="timeSlot">Time Slot*:</label>
+                        <select id="timeSlot" name="timeSlot" required> <!-- Corrected name attribute -->
+                            <option value="8:00 AM">08:00 - 8:30 AM</option>
+                            <option value="9:00 AM">08:30 - 09:00 AM</option>
+                            <option value="9:00 AM">09:00 - 09:30 AM</option>
+                            <option value="8:00 AM">09:30 - 10:00 AM</option>
+                            <option value="9:00 AM">10:00 - 10:30 AM</option>
+                            <option value="8:00 AM">10:30 - 11:00 AM</option>
+                            <option value="9:00 AM">11:00 - 11:30 AM</option>
+                            <option value="8:00 AM">11:30 - 12:00 AM</option>
+                            <option value="9:00 AM">12:00 - 12:30 PM</option>
+                            <option value="9:00 AM">12:30 - 13:00 PM</option>
+                            <option value="8:00 AM">13:00 - 13:30 PM</option>
+                            <option value="9:00 AM">13:30 - 14:00 PM</option>
+                            <option value="8:00 AM">14:00 - 14:30 PM</option>
+                            <option value="9:00 AM">14:30 - 15:00 PM</option>
+                            <option value="8:00 AM">15:00 - 15:30 PM</option>
+                            <option value="9:00 AM">15:30 - 16:00 PM</option>
+                            <option value="8:00 AM">16:00 - 16:30 PM</option>
+                            <option value="9:00 AM">16:30 - 17:30 PM</option>
+                            <!-- Add more time slots as needed -->
+                        </select><br><br>
+                        <label for="bookingDate">Date*:</label>
+                        <input type="date" id="bookingDate" name="bookingDate" required><br><br>
+                        <label for="lab">Lab*:</label>
+                        <select id="lab" name="lab" required>
+                            <option value="">Select Lab</option>
+                            <!-- Iterate through labs fetched from the controller -->
+                            <th:block th:each="lab : ${labs}">
+                                <option th:value="${lab.labName}" th:text="${lab.labName}"></option>
+                            </th:block>
+                        </select><br><br>
+                        <div th:if="${successMessage}" style="color: green;">Booking successful!</div>
+                        <div th:if="${errorMessage}" style="color: red;">Booking slot not available</div>
+                        <div th:if="${errorMessage}" style="color: red;">Booking slot </div>
+
+                        <button type="submit">Book</button>
+
+
+                    </form>
+
+
+
+                    </body>
+                </div>
+            </div>
+        </main>
+        <!-- Right Section -->
+        <div class="right-section">
+            <div class="nav">
+                <button id="menu-btn">
+                    <span class="material-icons-sharp">
+                        menu
+                    </span>
+                </button>
+                <div class="dark-mode">
+                    <span class="material-icons-sharp active">
+                        light_mode
+                    </span>
+                    <span class="material-icons-sharp">
+                        dark_mode
+                    </span>
+                </div>
+
+                <div class="profile">
+                    <div class="info" >
+                        <p>Hey, <b th:inline="text"> [[${#httpServletRequest.remoteUser}]]!</b></p>
+                        <small class="text-muted" th:if="${currentUser}"></small>
+                    </div>
+                    <div class="profile-photo">
+                        <img src="/images/profile-1.jpg">
+                    </div>
+                </div>
+
+        <!-- End of Main Content -->
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <script src="/index.js"></script>
+</body>
+
+</html>

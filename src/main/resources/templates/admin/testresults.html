@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en"
+        xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+            <meta charset="UTF-8">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <title>Responsive Dashboard Design #1 | AsmrProg</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Sidebar Section -->
+        <aside>
+            <div class="toggle">
+                <div class="logo">
+                    <img src="/images/logo.png">
+                    <h2>SD<span class="danger">Lab</span></h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-icons-sharp">
+                        close
+                    </span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <a href="/admin/dashboard">
+                    <span class="material-icons-sharp">
+                        dashboard
+                    </span>
+                    <h3>Dashboard</h3>
+                </a>
+
+                <a href="/admin/users">
+                    <span class="material-icons-sharp">
+                        person_outline
+                    </span>
+                    <h3>Users</h3>
+                </a>
+
+                <a href="/admin/labs">
+                    <span class="material-icons-sharp">
+                        inventory
+                    </span>
+                    <h3>Labs</h3>
+                </a>
+                <a href="/admin/bookings">
+                    <span class="material-icons-sharp">
+                        mail_outline
+                    </span>
+                    <h3>Bookings</h3>
+                    <span class="message-count"></span>
+                </a>
+
+                <a href="/admin/testresults">
+                    <span class="material-icons-sharp">
+                       receipt_long
+                    </span>
+                    <h3>Add Test Result</h3>
+
+                </a>
+
+
+
+
+                <a href="/login"th:action="@{/logout}" method="post">
+                    <span class="material-icons-sharp">
+                        logout
+                    </span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+        <!-- End of Sidebar Section -->
+
+        <!-- Main Content -->
+        <main>
+            <div class="new-users">
+                <h2>Users</h2>
+                <div class="user-list">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Upload Test Result</title>
+                    </head>
+                    <body>
+                    <h1>Upload Test Result</h1>
+                    <form id="uploadForm">
+                        <label for="bookingId">Booking ID:</label>
+                        <input type="text" id="bookingId" name="bookingId" required><br><br>
+                        <label for="result">Test Result:</label>
+                        <input type="text" id="result" name="result"><br><br>
+                        <input type="file" id="file" name="file" required accept=".pdf"><br><br>
+                        <button type="submit">Upload</button>
+                    </form>
+                    <hr>
+                    <h1>View Test Result</h1>
+                    <h2>Download Test Result</h2>
+                    <form id="downloadForm" action="/api/test-results/download" method="get">
+                        <label for="downloadBookingId">Enter Booking ID:</label>
+                        <input type="text" id="downloadBookingId" name="bookingId" required><br><br>
+                        <button type="submit">Download</button>
+                    </form>
+
+                    <script>
+                        document.getElementById("uploadForm").addEventListener("submit", function (event) {
+                            event.preventDefault();
+                            let formData = new FormData();
+                            formData.append('bookingId', document.getElementById("bookingId").value);
+                            formData.append('result', document.getElementById("result").value);
+                            formData.append('file', document.getElementById("file").files[0]);
+                            fetch('/api/test-results/upload', {
+                                method: 'POST',
+                                body: formData
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    alert("Test result uploaded successfully!");
+                                    document.getElementById("bookingId").value = "";
+                                    document.getElementById("result").value = "";
+                                    document.getElementById("file").value = "";
+                                })
+                                .catch(error => console.error('Error:', error));
+                        });
+
+                        document.getElementById("downloadForm").addEventListener("submit", function(event) {
+                            event.preventDefault();
+                            var bookingId = document.getElementById("downloadBookingId").value;
+                            window.location.href = "/api/test-results/download/" + bookingId;
+                        });
+
+                    </script>
+                    </body>
+
+
+
+
+
+                </div>
+            </div>
+        </main>
+        <!-- Right Section -->
+        <div class="right-section">
+            <div class="nav">
+                <button id="menu-btn">
+                    <span class="material-icons-sharp">
+                        menu
+                    </span>
+                </button>
+                <div class="dark-mode">
+                    <span class="material-icons-sharp active">
+                        light_mode
+                    </span>
+                    <span class="material-icons-sharp">
+                        dark_mode
+                    </span>
+                </div>
+
+                <div class="profile">
+                    <div class="info" >
+                        <p>Hey, <b th:inline="text"> [[${#httpServletRequest.remoteUser}]]!</b></p>
+                        <small class="text-muted" th:if="${currentUser}"></small>
+                    </div>
+                    <div class="profile-photo">
+                        <img src="/images/profile-1.jpg">
+                    </div>
+                </div>
+
+        <!-- End of Main Content -->
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <script src="/index.js"></script>
+</body>
+
+</html>

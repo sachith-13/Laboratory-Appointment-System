@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en"
+        xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+            <meta charset="UTF-8">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <title>Responsive Dashboard Design #1 | AsmrProg</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Sidebar Section -->
+        <aside>
+            <div class="toggle">
+                <div class="logo">
+                    <img src="/images/logo.png">
+                    <h2>SD<span class="danger">Lab</span></h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-icons-sharp">
+                        close
+                    </span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <a href="/admin/dashboard">
+                    <span class="material-icons-sharp">
+                        dashboard
+                    </span>
+                    <h3>Dashboard</h3>
+                </a>
+
+                <a href="/admin/users">
+                    <span class="material-icons-sharp">
+                        person_outline
+                    </span>
+                    <h3>Users</h3>
+                </a>
+
+                <a href="/admin/labs">
+                    <span class="material-icons-sharp">
+                        inventory
+                    </span>
+                    <h3>Labs</h3>
+                </a>
+                <a href="/admin/bookings">
+                    <span class="material-icons-sharp">
+                        mail_outline
+                    </span>
+                    <h3>Bookings</h3>
+                    <span class="message-count"></span>
+                </a>
+
+                <a href="/admin/testresults">
+                    <span class="material-icons-sharp">
+                       receipt_long
+                    </span>
+                    <h3>Add Test Result</h3>
+
+                </a>
+
+
+
+
+                <a href="/login"th:action="@{/logout}" method="post">
+                    <span class="material-icons-sharp">
+                        logout
+                    </span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+        <!-- End of Sidebar Section -->
+
+        <!-- Main Content -->
+        <main>
+            <div class="new-users">
+                <h2>Labs</h2>
+                <div class="user-list">
+                    <head>
+                        <title></title>
+                    </head>
+                    <body >
+                    <h2>Add a lab</h2>
+                    <form id="labForm">
+                        <label for="labName">Lab Name:</label><br>
+                        <input type="text" id="labName" name="labName" required><br>
+                        <label for="description">Description:</label><br>
+                        <textarea id="description" name="description" required></textarea><br>
+                        <button type="button" onclick="addLab()">Add Lab</button>
+                        <div th:if="${successMessage}" style="color: green;">Booking successful!</div>
+                    </form>
+                    <div id="errorMessage" style="display: none; color: red;"></div>
+                    <script>
+                        function addLab() {
+                            var labNameInput = document.getElementById('labName');
+                            var descriptionInput = document.getElementById('description');
+
+                            // Check if the inputs are empty
+                            if (labNameInput.value.trim() === '' || descriptionInput.value.trim() === '') {
+                                var errorDiv = document.getElementById('errorMessage');
+                                errorDiv.innerText = "Both Lab Name and Description are required.";
+                                errorDiv.style.display = 'block';
+                                return; // Stop further execution
+                            }
+
+                            var form = document.getElementById('labForm');
+                            var formData = new FormData(form);
+                            var jsonObject = {};
+                            formData.forEach(function(value, key){
+                                jsonObject[key] = value;
+                            });
+
+                            fetch('/addLab', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(jsonObject),
+                            }).then(response => {
+                                return response.json();
+                            }).then(data => {
+                                // Display success message
+                                if (data.successMessage) {
+                                    var successDiv = document.getElementById('successMessage');
+                                    successDiv.innerText = data.successMessage;
+                                    successDiv.style.display = 'block';
+                                    var errorDiv = document.getElementById('errorMessage');
+                                    errorDiv.style.display = 'none';
+                                }
+                                // Display error message
+                                if (data.errorMessage) {
+                                    var errorDiv = document.getElementById('errorMessage');
+                                    errorDiv.innerText = data.errorMessage;
+                                    errorDiv.style.display = 'block';
+                                    var successDiv = document.getElementById('successMessage');
+                                    successDiv.style.display = 'none';
+                                }
+                            }).catch(error => {
+                                // Handle error
+                                console.error('Error:', error);
+                            });
+                        }
+                    </script>
+
+                    <!-- Your form elements go here -->
+
+
+
+                    <div class="user-list">
+                        <head onload="setMinDate()">
+                            <title></title>
+                        </head>
+                        <body>
+                        <div>
+
+                            <div>
+                                <h2>All Labs</h2>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>Lab Name</th>
+                                        <th>Description</th>
+                                        <th>Created By</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="lab : ${labs}">
+                                        <td th:text="${lab.labName}"></td>
+                                        <td th:text="${lab.description}"></td>
+                                        <td th:text="${lab.userId}"></td>
+                                        <td>
+                                            <form th:action="@{/deleteLab}" method="post">
+                                                <input type="hidden" name="labId" th:value="${lab.id}" />
+                                                <button type="submit">Delete</button>
+
+                                            </form>
+
+                                        </td>
+
+                                    </tr>
+                                    <div th:if="${DeletesuccessMessage}" style="color: green;">Lab deleted successfully</div>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </body >
+                </div>
+            </div>
+        </main>
+        <!-- Right Section -->
+        <div class="right-section">
+            <div class="nav">
+                <button id="menu-btn">
+                    <span class="material-icons-sharp">
+                        menu
+                    </span>
+                </button>
+                <div class="dark-mode">
+                    <span class="material-icons-sharp active">
+                        light_mode
+                    </span>
+                    <span class="material-icons-sharp">
+                        dark_mode
+                    </span>
+                </div>
+
+                <div class="profile">
+                    <div class="info" >
+                        <p>Hey, <b th:inline="text"> [[${#httpServletRequest.remoteUser}]]!</b></p>
+                        <small class="text-muted" th:if="${currentUser}"></small>
+                    </div>
+                    <div class="profile-photo">
+                        <img src="/images/profile-1.jpg">
+                    </div>
+                </div>
+
+        <!-- End of Main Content -->
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <script src="/index.js"></script>
+</body>
+
+</html>
