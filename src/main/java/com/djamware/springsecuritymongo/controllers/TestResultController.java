@@ -21,11 +21,12 @@ public class TestResultController {
 
     @PostMapping("/upload")
     public ResponseEntity<TestResult> uploadTestResult(@RequestParam("bookingId") String bookingId,
+                                                       @RequestParam("amount") String amount,
                                                        @RequestParam("file") MultipartFile file) throws IOException {
         byte[] fileBytes = file.getBytes();
-        TestResult uploadedTestResult = testResultService.uploadTestResult(bookingId, fileBytes);
+        TestResult uploadedTestResult = testResultService.uploadTestResult(bookingId, fileBytes ,amount );
 
-        // Returning ResponseEntity with uploaded test result
+
         return ResponseEntity.ok()
                 .body(uploadedTestResult);
     }

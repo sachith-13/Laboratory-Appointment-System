@@ -705,4 +705,136 @@ main .recent-orders a{
         font-size: 2rem;
     }
 
+
+
+}
+
+.cancel-button {
+    background-color: #f44336; /* Red */
+    border: none;
+    color: white;
+    padding: 5px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+
+
+.submit-button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 5px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+/* Style for input fields */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="date"],
+input[type="time"],
+input[type="number"],
+input[type="tel"],
+input[type="search"],
+input[type="url"],
+input[type="file"],
+textarea,
+select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensures that padding and border are included in the total width and height of the elements */
+    margin-bottom: 10px;
+    width: 100%; /* Make sure input fields take up full width */
+    font-size: 16px; /* Adjust font size as needed */
+}
+
+/* Style for focused input fields */
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+input[type="search"]:focus,
+input[type="url"]:focus,
+input[type="file"]:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #007bff; /* Change border color when input field is focused */
+}
+
+/* Style for disabled input fields */
+input[type="text"]:disabled,
+input[type="password"]:disabled,
+input[type="email"]:disabled,
+input[type="date"]:disabled,
+input[type="time"]:disabled,
+input[type="number"]:disabled,
+input[type="tel"]:disabled,
+input[type="search"]:disabled,
+input[type="url"]:disabled,
+input[type="file"]:disabled,
+textarea:disabled,
+select:disabled {
+    background-color: #f4f4f4; /* Change background color for disabled input fields */
+    cursor: not-allowed; /* Change cursor style for disabled input fields */
+}
+/* Style for labels */
+label {
+    font-weight: bold; /* Make the text bold */
+    font-size: 16px; /* Adjust font size as needed */
+    color: #333; /* Set text color */
+    margin-bottom: 5px; /* Add some space below the label */
+}
+
+/* Style for focused labels (optional) */
+label:focus {
+    outline: none; /* Remove the default focus outline */
+    /* Add additional styling if necessary */
+}
+
+/* Style for the table */
+table {
+    width: 100%; /* Set table width to 100% of its container */
+    border-collapse: collapse; /* Collapse the borders between cells */
+    border: 1px solid #ddd; /* Add a border around the table */
+}
+
+/* Style for table headers (th) */
+th {
+    background-color: #f2f2f2; /* Set background color for header cells */
+    padding: 8px; /* Add padding inside header cells */
+    text-align: left; /* Align text to the left */
+    border-bottom: 1px solid #ddd; /* Add a border at the bottom of header cells */
+}
+
+/* Style for table rows (tr) */
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Set background color for even rows */
+}
+
+/* Style for table cells (td) */
+td {
+    padding: 8px; /* Add padding inside cells */
+    border-bottom: 1px solid #ddd; /* Add a border at the bottom of cells */
+}
+
+/* Hover effect for table rows */
+tr:hover {
+    background-color: #f2f2f2; /* Change background color on hover */
 }

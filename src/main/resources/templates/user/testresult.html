@@ -45,13 +45,15 @@
                 <h3>Your Bookings</h3>
             </a>
 
-            <a href="/user/testresult">
+            <a href="/user/payment">
                     <span class="material-icons-sharp">
                         mail_outline
                     </span>
-                <h3>Test Result</h3>
+                <h3>Payment</h3>
                 <span class="message-count"></span>
             </a>
+
+
 
 
 
@@ -79,9 +81,9 @@
 
                     <h1>Download Test Result</h1>
                     <form id="downloadForm" action="/api/test-results/download" method="get">
-                        <label for="downloadBookingId">Enter Booking ID:</label>
+                        <label for="downloadBookingId">Enter Booking ID</label>
                         <input type="text" id="downloadBookingId" name="bookingId" required><br><br>
-                        <button type="submit">Download</button>
+                        <button class="submit-button" type="submit">Download</button>
                     </form>
 
                     <script>

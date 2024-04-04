@@ -33,30 +33,30 @@ public class BookingController {
 
 
     @Autowired
-    private LabRepository labRepository; // Inject LabRepository
+    private LabRepository labRepository;
 
     @GetMapping("user/dashboard")
     public String showBookingForm(Model model) {
         List<Lab> labs = labRepository.findAll();
         model.addAttribute("labs", labs);
-        return "user/dashboard"; // Return the HTML template for booking
+        return "user/dashboard";
     }
 
     @GetMapping("admin/bookings")
     public String showBookings(Model model) {
         List<Booking> bookings = bookingService.getAllBookings();
         model.addAttribute("bookings", bookings);
-        return "admin/bookings"; // Assuming your Thymeleaf template is named "bookings.html"
+        return "admin/bookings";
     }
     @GetMapping("/user/bookings")
     public String showUserBookings(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String userId = auth.getName(); // Get the username (userId) of the currently logged-in user
+        String userId = auth.getName();
 
         List<Booking> userBookings = bookingService.getUserBookings(userId);
         model.addAttribute("bookings", userBookings);
 
-        return "user/bookings"; // Assuming your Thymeleaf template is named "bookings.html" under "user" directory
+        return "user/bookings";
     }
 
 
@@ -68,15 +68,19 @@ public class BookingController {
                                RedirectAttributes redirectAttributes) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String userId = authentication.getName(); // Retrieves the logged-in user's user ID
+            String userId = authentication.getName();
             LocalDate parsedBookingDate = LocalDate.parse(bookingDate);
 
             if (bookingService.isBookingAvailable(parsedBookingDate, timeSlot, lab)) {
-                bookingService.saveBooking(userId, timeSlot, parsedBookingDate, lab);
+
+                long bookingId = bookingService.saveBooking(userId, timeSlot, parsedBookingDate, lab);
+
                 redirectAttributes.addFlashAttribute("successMessage", "Booking successful!");
 
-                String bookingDetails = "Time Slot: " + timeSlot + "\nBooking Date: " + parsedBookingDate.toString() + "\nLab: " + lab;
+
+                String bookingDetails =  "Time Slot: " + timeSlot + "\nBooking Date: " + parsedBookingDate.toString() + "\nLab: " + lab;
                 emailService.sendBookingConfirmationEmail(userId, bookingDetails);
+
             } else {
                 redirectAttributes.addFlashAttribute("errorMessage", "Booking slot not available for the selected lab.");
             }
@@ -88,25 +92,66 @@ public class BookingController {
             redirectAttributes.addFlashAttribute("errorMessage", "Error while processing booking.");
         }
 
-        return "redirect:/user/dashboard"; // Redirect to the dashboard after booking attempt
+        return "redirect:/user/dashboard";
     }
+
 
 
 
     @PostMapping("admin/bookings/{bookingId}/cancel")
     public String cancelBooking(@PathVariable("bookingId") String bookingId) {
+
+        Booking booking = bookingService.getBookingById(bookingId);
+        String userId = booking.getUserId();
+
+        if (booking == null) {
+
+            return "redirect:/admin/bookings";
+        }
+
+        String timeSlot = booking.getTimeSlot();
+        String lab = booking.getLab();
+
         bookingService.cancelBooking(bookingId);
-        // Redirect to the dashboard or any other page after canceling the booking
+
+        String bookingDetails = "Booking ID: " + bookingId + "\nTime Slot: " + timeSlot + "\nBooking Date: " + booking.getBookingDate().toString() + "\nLab: " + lab;
+        emailService.sendBookingCancelNotification(userId, bookingDetails);
+
+
         return "redirect:/admin/bookings";
     }
 
+
     @PostMapping("user/bookings/{bookingId}/cancel")
     public String usercancelBooking(@PathVariable("bookingId") String bookingId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId = authentication.getName();
+        Booking booking = bookingService.getBookingById(bookingId);
+        String timeSlot = booking.getTimeSlot();
+        String lab = booking.getLab();
+
         bookingService.cancelBooking(bookingId);
-        // Redirect to the dashboard or any other page after canceling the booking
+
+        String bookingDetails = "Booking ID: " + bookingId + "\nTime Slot: " + timeSlot + "\nBooking Date: " + booking.getBookingDate().toString() + "\nLab: " + lab;
+        emailService.sendBookingCancelNotification(userId, bookingDetails);
+
         return "redirect:/user/bookings";
     }
 
+
+    @PostMapping("admin/bookings/{bookingId}/approve")
+    public String approveBooking(@PathVariable("bookingId") String bookingId) {
+
+        Booking booking = bookingService.getBookingById(bookingId);
+        String userId = booking.getUserId();
+
+        bookingService.approveBooking(bookingId);
+
+        String bookingDetails = "Booking ID: " + bookingId;
+        emailService.sendBookingApprovalNotification(userId, bookingDetails);
+
+        return "redirect:/admin/bookings/";
+    }
 
 
 }

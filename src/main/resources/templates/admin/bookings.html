@@ -96,6 +96,7 @@
                                 <th>Time Slot</th>
                                 <th>Booking Date</th>
                                 <th>Lab</th>
+                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -107,8 +108,13 @@
                                 <td>
                                     <form th:action="@{'/admin/bookings/' + ${booking.id} + '/cancel'}" th:method="post">
                                         <input type="hidden" name="_method" value="DELETE"/>
-                                        <button type="submit">Cancel</button>
+                                        <button  class="cancel-button" type="submit">Cancel</button>
                                     </form>
+                                    <form th:action="@{'/admin/bookings/' + ${booking.id} + '/approve'}" method="post">
+                                        <input type="hidden" name="_method" value="POST"/>
+                                        <button class="submit-button" type="submit">Approve</button>
+                                    </form>
+
                                 </td>
                             </tr>
                             </tbody>

@@ -95,7 +95,7 @@
                         <input type="text" id="labName" name="labName" required><br>
                         <label for="description">Description:</label><br>
                         <textarea id="description" name="description" required></textarea><br>
-                        <button type="button" onclick="addLab()">Add Lab</button>
+                        <button class="submit-button" type="button" onclick="addLab()">Add Lab</button>
                         <div th:if="${successMessage}" style="color: green;">Booking successful!</div>
                     </form>
                     <div id="errorMessage" style="display: none; color: red;"></div>
@@ -170,6 +170,7 @@
                                         <th>Lab Name</th>
                                         <th>Description</th>
                                         <th>Created By</th>
+                                        <th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -180,7 +181,7 @@
                                         <td>
                                             <form th:action="@{/deleteLab}" method="post">
                                                 <input type="hidden" name="labId" th:value="${lab.id}" />
-                                                <button type="submit">Delete</button>
+                                                <button  class="cancel-button" type="submit">Delete</button>
 
                                             </form>
 

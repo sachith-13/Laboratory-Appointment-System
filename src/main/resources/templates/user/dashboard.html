@@ -44,14 +44,15 @@
                     </span>
                     <h3>Your Bookings</h3>
                 </a>
-
-                <a href="/user/testresult">
+                <a href="/user/payment">
                     <span class="material-icons-sharp">
                         mail_outline
                     </span>
-                    <h3>Test Result</h3>
+                    <h3>Payment</h3>
                     <span class="message-count"></span>
                 </a>
+
+
 
 
 
@@ -98,25 +99,18 @@
                     <form action="/book" method="post">
                         <label for="timeSlot">Time Slot*:</label>
                         <select id="timeSlot" name="timeSlot" required> <!-- Corrected name attribute -->
-                            <option value="8:00 AM">08:00 - 8:30 AM</option>
-                            <option value="9:00 AM">08:30 - 09:00 AM</option>
-                            <option value="9:00 AM">09:00 - 09:30 AM</option>
-                            <option value="8:00 AM">09:30 - 10:00 AM</option>
-                            <option value="9:00 AM">10:00 - 10:30 AM</option>
-                            <option value="8:00 AM">10:30 - 11:00 AM</option>
-                            <option value="9:00 AM">11:00 - 11:30 AM</option>
-                            <option value="8:00 AM">11:30 - 12:00 AM</option>
-                            <option value="9:00 AM">12:00 - 12:30 PM</option>
-                            <option value="9:00 AM">12:30 - 13:00 PM</option>
-                            <option value="8:00 AM">13:00 - 13:30 PM</option>
-                            <option value="9:00 AM">13:30 - 14:00 PM</option>
-                            <option value="8:00 AM">14:00 - 14:30 PM</option>
-                            <option value="9:00 AM">14:30 - 15:00 PM</option>
-                            <option value="8:00 AM">15:00 - 15:30 PM</option>
-                            <option value="9:00 AM">15:30 - 16:00 PM</option>
-                            <option value="8:00 AM">16:00 - 16:30 PM</option>
-                            <option value="9:00 AM">16:30 - 17:30 PM</option>
-                            <!-- Add more time slots as needed -->
+                            <option value="8:00 AM">08:00 AM</option>
+                            <option value="9:00 AM">09:00 AM</option>
+                            <option value="10:00 AM">10:00 AM</option>
+                            <option value="11:00 AM">11:00 AM</option>
+                            <option value="12:00 PM">12:00 PM</option>
+                            <option value="13:00 PM">13:00 PM</option>
+                            <option value="14:00 PM">14:00 PM</option>
+                            <option value="15:00 PM">15:00 PM</option>
+                            <option value="16:00 PM">15:00 PM</option>
+                            <option value="17:00 PM">15:00 PM</option>
+
+
                         </select><br><br>
                         <label for="bookingDate">Date*:</label>
                         <input type="date" id="bookingDate" name="bookingDate" required><br><br>
@@ -128,16 +122,14 @@
                                 <option th:value="${lab.labName}" th:text="${lab.labName}"></option>
                             </th:block>
                         </select><br><br>
+
                         <div th:if="${successMessage}" style="color: green;">Booking successful!</div>
                         <div th:if="${errorMessage}" style="color: red;">Booking slot not available</div>
-                        <div th:if="${errorMessage}" style="color: red;">Booking slot </div>
 
-                        <button type="submit">Book</button>
 
+                        <button class="submit-button" type="submit">Book</button>
 
                     </form>
-
-
 
                     </body>
                 </div>

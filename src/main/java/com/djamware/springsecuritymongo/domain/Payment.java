@@ -5,26 +5,24 @@ import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "test_results")
-public class TestResult {
+@Document(collection = "payments")
+public class Payment {
     @Id
     private String id;
+
     @Indexed(unique = true, direction = IndexDirection.DESCENDING, dropDups = true)
     private String bookingId;
-    private String result;
-    private byte[] file;
+    private String CardDetails;
+    private double PaymentAmount;
 
-    private String amount;
-
-    public TestResult(String id, String bookingId, String result, byte[] file, String amount) {
+    public Payment(String id, String bookingId, String cardDetails, double paymentAmount) {
         this.id = id;
         this.bookingId = bookingId;
-        this.result = result;
-        this.file = file;
-        this.amount = amount;
+        CardDetails = cardDetails;
+        PaymentAmount = paymentAmount;
     }
 
-    public TestResult() {
+    public Payment() {
     }
 
     public String getId() {
@@ -43,27 +41,21 @@ public class TestResult {
         this.bookingId = bookingId;
     }
 
-    public String getResult() {
-        return result;
+    public String getCardDetails() {
+        return CardDetails;
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    public void setCardDetails(String cardDetails) {
+        CardDetails = cardDetails;
     }
 
-    public byte[] getFile() {
-        return file;
+    public double getPaymentAmount() {
+        return PaymentAmount;
     }
 
-    public void setFile(byte[] file) {
-        this.file = file;
+    public void setPaymentAmount(double paymentAmount) {
+        PaymentAmount = paymentAmount;
     }
 
-    public String getAmount() {
-        return amount;
-    }
 
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
 }

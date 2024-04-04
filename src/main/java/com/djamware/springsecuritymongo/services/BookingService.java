@@ -17,26 +17,30 @@ public class BookingService {
     @Autowired
     public BookingService(BookingRepository bookingRepository, EmailService emailService) {
         this.bookingRepository = bookingRepository;
-        this.emailService = emailService; // Initialize EmailService
+        this.emailService = emailService; 
     }
 
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
     }
 
+    public Booking getBookingById(String bookingId) {
+        return bookingRepository.findById(bookingId).orElse(null);
+    }
+
     public List<Booking> getUserBookings(String userId) {
         return bookingRepository.findByUserId(userId);
     }
-    public void saveBooking(String userId, String timeSlot, LocalDate bookingDate, String lab) {
+    public long saveBooking(String userId, String timeSlot, LocalDate bookingDate, String lab) {
         try {
-            // Check if there's an existing booking for the given user, time slot, lab, and date
+
             Booking existingBooking = bookingRepository.findByUserIdAndTimeSlotAndBookingDate(userId, timeSlot, bookingDate);
 
             if (existingBooking != null && existingBooking.getLab().equals(lab)) {
-                // If the user already has a booking for the same time slot, lab, and day
+
                 throw new RuntimeException("You have already booked this time slot for the selected lab on the day.");
             } else {
-                // Save the booking
+
                 Booking booking = new Booking();
                 booking.setUserId(userId);
                 booking.setTimeSlot(timeSlot);
@@ -47,44 +51,59 @@ public class BookingService {
 
             }
         } catch (Exception e) {
-            // Handle exceptions
+
             throw new RuntimeException("Error while saving booking: " + e.getMessage());
         }
+        return 0;
     }
 
 
 
     public boolean isBookingAvailable(LocalDate bookingDate, String timeSlot, String lab) {
-        // Check if there's an existing booking for the given time slot and date
+
         Booking existingBooking = bookingRepository.findByTimeSlotAndBookingDate(timeSlot, bookingDate);
-        // If there's no booking for the given time slot on the given date, the slot is available
+
         return existingBooking == null;
     }
 
     public void cancelBooking(String bookingId) {
-        // Fetch the booking from the database
+
         Optional<Booking> optionalBooking = bookingRepository.findById(bookingId);
         if (optionalBooking.isPresent()) {
             Booking booking = optionalBooking.get();
-            // Implement cancelation logic here, e.g., delete the booking
+
             bookingRepository.delete(booking);
         } else {
-            // Handle case where booking is not found
+
             throw new IllegalArgumentException("Booking with ID " + bookingId + " not found.");
         }
     }
 
     public void usercancelBooking(String bookingId) {
-        // Fetch the booking from the database
+
         Optional<Booking> optionalBooking = bookingRepository.findById(bookingId);
         if (optionalBooking.isPresent()) {
             Booking booking = optionalBooking.get();
-            // Implement cancelation logic here, e.g., delete the booking
+
             bookingRepository.delete(booking);
         } else {
-            // Handle case where booking is not found
+
             throw new IllegalArgumentException("Booking with ID " + bookingId + " not found.");
         }
     }
 
-}
+    public void approveBooking(String bookingId) {
+        Optional<Booking> bookingOptional = bookingRepository.findById(bookingId);
+        if (bookingOptional.isPresent()) {
+            Booking booking = bookingOptional.get();
+            booking.setApproved(true);
+            bookingRepository.save(booking);
+        } else {
+            // Handle case when booking is not found
+            throw new RuntimeException("Booking not found with id: " + bookingId);
+        }
+    }
+    }
+
+
+

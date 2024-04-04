@@ -21,12 +21,15 @@ public class Booking {
 
     private String lab;
 
-    public Booking(String id, String userId, String timeSlot, LocalDate bookingDate, String lab) {
+    private boolean approved;
+
+    public Booking(String id, String userId, String timeSlot, LocalDate bookingDate, String lab, boolean approved) {
         this.id = id;
         this.userId = userId;
         this.timeSlot = timeSlot;
         this.bookingDate = bookingDate;
         this.lab = lab;
+        this.approved = approved;
     }
 
     public Booking() {
@@ -72,14 +75,11 @@ public class Booking {
         this.lab = lab;
     }
 
-    @Override
-    public String toString() {
-        return "Booking{" +
-                "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
-                ", timeSlot='" + timeSlot + '\'' +
-                ", bookingDate=" + bookingDate +
-                ", lab='" + lab + '\'' +
-                '}';
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
     }
 }

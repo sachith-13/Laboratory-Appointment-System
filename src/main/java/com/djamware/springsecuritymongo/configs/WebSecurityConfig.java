@@ -50,6 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/dashboard").hasAuthority("USER")
                 .antMatchers("user/bookings").authenticated()
                 .antMatchers("user/testresult").authenticated()
+                .antMatchers("user/payment").authenticated()
                 .antMatchers("admin/users").authenticated()
                 .antMatchers("admin/labs").authenticated()
                 .antMatchers("admin/bookings").authenticated()

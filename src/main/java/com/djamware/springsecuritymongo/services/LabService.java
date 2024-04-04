@@ -31,7 +31,7 @@ public class LabService {
     public void deleteLab(String labId) {
         labRepository.deleteById(labId);
     }
-    // Additional methods implementation
+
 }
 
 

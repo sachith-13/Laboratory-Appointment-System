@@ -45,13 +45,15 @@
                 <h3>Your Bookings</h3>
             </a>
 
-            <a href="/user/testresult">
+            <a href="/user/payment">
                     <span class="material-icons-sharp">
                         mail_outline
                     </span>
-                <h3>Test Result</h3>
+                <h3>Payment</h3>
                 <span class="message-count"></span>
             </a>
+
+
 
 
             <a href="/login"th:action="@{/logout}" method="post">
@@ -74,13 +76,17 @@
                 </head>
                 <body onload="setMinDate()">
                 <div>
+
+
+
+
                     <table>
                         <thead>
                         <tr>
-
-                            <th>Time </th>
+                            <th>Time</th>
                             <th>Date</th>
                             <th>Lab</th>
+                            <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -91,12 +97,14 @@
                             <td>
                                 <form th:action="@{'/user/bookings/' + ${booking.id} + '/cancel'}" th:method="post">
                                     <input type="hidden" name="_method" value="DELETE"/>
-                                    <button type="submit">Cancel</button>
+                                    <button class="cancel-button" type="submit">Cancel</button>
                                 </form>
+
                             </td>
                         </tr>
                         </tbody>
                     </table>
+
 
                 </div>
 

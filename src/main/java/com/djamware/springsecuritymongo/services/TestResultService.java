@@ -20,10 +20,11 @@ public class TestResultService {
     }
 
 
-    public TestResult uploadTestResult(String bookingId, byte[] file) {
+    public TestResult uploadTestResult(String bookingId, byte[] file ,String amount) {
         TestResult testResult = new TestResult();
         testResult.setBookingId(bookingId);
         testResult.setFile(file);
+        testResult.setAmount(amount);
         return testResultRepository.save(testResult);
     }
 

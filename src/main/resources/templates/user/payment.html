@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<meta charset="UTF-8">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <title>Responsive Dashboard Design #1 | AsmrProg</title>
+</head>
+
+<body>
+
+<div class="container">
+    <!-- Sidebar Section -->
+    <aside>
+        <div class="toggle">
+            <div class="logo">
+                <img src="/images/logo.png">
+                <h2>SD<span class="danger">Lab</span></h2>
+            </div>
+            <div class="close" id="close-btn">
+                    <span class="material-icons-sharp">
+                        close
+                    </span>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <a href="/user/dashboard">
+                    <span class="material-icons-sharp">
+                        dashboard
+                    </span>
+                <h3>Book a time</h3>
+            </a>
+
+            <a href="/user/bookings">
+                    <span class="material-icons-sharp">
+                        receipt_long
+                    </span>
+                <h3>Your Bookings</h3>
+            </a>
+
+            <a href="/user/payment">
+                    <span class="material-icons-sharp">
+                        mail_outline
+                    </span>
+                <h3>Payment</h3>
+                <span class="message-count"></span>
+            </a>
+
+
+
+
+
+
+            <a href="/login"th:action="@{/logout}" method="post">
+                    <span class="material-icons-sharp">
+                        logout
+                    </span>
+                <h3>Logout</h3>
+            </a>
+        </div>
+    </aside>
+    <!-- End of Sidebar Section -->
+
+    <!-- Main Content -->
+    <main>
+        <div class="new-users">
+            <h2>View Test Result</h2>
+            <div class="user-list">
+                <head>
+                    <title>Payment Form</title>
+                </head>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Payment Details</title>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        $('#searchForm').submit(function(event) {
+                            event.preventDefault();
+                            var bookingId = $('#bookingId').val();
+                            $.get('/payment/' + bookingId, function(amount) {
+                                console.log("Received amount:", amount); // Check if amount is received
+                                $('#paymentAmount').val(amount); // Set payment amount as value
+                                $('#bookingIdPayment').val(bookingId);
+                            }).fail(function(xhr, status, error) {
+                                console.error("Error:", error); // Log any errors
+                                $('#paymentAmount').val('Error: ' + xhr.responseText); // Display error in the input field
+                            });
+                        });
+
+                        $('#paymentForm').submit(function(event) {
+                            event.preventDefault(); // Prevent the form from submitting normally
+
+                            // Perform your payment processing here, like sending an AJAX request to the server
+                            // Assume payment is successful for demonstration
+                            var paymentSuccessful = true;
+
+                            if (paymentSuccessful) {
+                                // Redirect to the test results page
+                                window.location.href = "/user/testresult"; // Replace "/test-results-page" with the actual URL of your test results page
+                            } else {
+                                // Display error message
+                                $('#errorMessage').text("Error processing payment. Please try again.");
+                            }
+                        });
+                    });
+                </script>
+
+                </head>
+                <body>
+
+                <h1>Your appoiment amount</h1>
+
+                <form id="searchForm">
+                    <label for="bookingId">Enter Booking ID</label>
+                    <input type="text" id="bookingId" name="bookingId" required>
+                    <button class="submit-button" type="submit">Search</button>
+
+                </form>
+              <br>
+                <h2>Enter Card Details</h2>
+                <form id="paymentForm" action="/payment/submit" method="post">
+                    <label for="bookingIdPayment">Booking ID</label>
+                    <input type="text" id="bookingIdPayment" name="bookingIdPayment" readonly  required>
+
+                    <label for="paymentAmount">Payment Amount</label>
+                    <input type="text" id="paymentAmount" name="paymentAmount" readonly  required>
+
+                    <label for="cardDetails">Card Details</label>
+                    <input type="text" id="cardDetails" name="cardDetails" required>
+
+
+
+                    <input class="submit-button" type="submit" value="Pay">
+                </form>
+                <div id="errorMessage" class="error-message"></div>
+                <div id="successMessage" class="success-message"></div>
+
+                </body>
+            </div>
+        </div>
+    </main>
+
+
+    <!-- Right Section -->
+    <div class="right-section">
+        <div class="nav">
+            <button id="menu-btn">
+                    <span class="material-icons-sharp">
+                        menu
+                    </span>
+            </button>
+            <div class="dark-mode">
+                    <span class="material-icons-sharp active">
+                        light_mode
+                    </span>
+                <span class="material-icons-sharp">
+                        dark_mode
+                    </span>
+            </div>
+
+            <div class="profile">
+                <div class="info" >
+                    <p>Hey, <b th:inline="text"> [[${#httpServletRequest.remoteUser}]]!</b></p>
+                    <small class="text-muted" th:if="${currentUser}"></small>
+                </div>
+                <div class="profile-photo">
+                    <img src="/images/profile-1.jpg">
+                </div>
+            </div>
+
+            <!-- End of Main Content -->
+        </div>
+    </div>
+
+
+</div>
+
+
+<script src="/index.js"></script>
+</body>
+
+</html>
