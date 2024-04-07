@@ -31,19 +31,16 @@ public class LabController {
     }
 
     @PostMapping("/addLab")
-    public String addLab(@RequestBody Lab lab, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<Object> addLab(@RequestBody Lab lab) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String userId = authentication.getName(); // Retrieves the logged-in user's user ID
-
             lab.setUserId(userId);
-
             Lab savedLab = labService.addLab(lab, userId);
-            redirectAttributes.addFlashAttribute("DeletesuccessMessage", "Lab added successfully");
+            return ResponseEntity.status(HttpStatus.OK).body("{\"successMessage\": \"Lab added successfully\"}");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Failed to add lab: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"errorMessage\": \"Failed to add lab: " + e.getMessage() + "\"}");
         }
-        return "redirect:/admin/labs"; // Redirect to the addLab page after lab addition attempt
     }
 
 

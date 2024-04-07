@@ -79,16 +79,67 @@
             </div>
         </aside>
         <!-- End of Sidebar Section -->
+<script>
+    function addLab() {
+        var labNameInput = document.getElementById('labName');
+        var descriptionInput = document.getElementById('description');
 
+        // Check if the inputs are empty
+        if (labNameInput.value.trim() === '' || descriptionInput.value.trim() === '') {
+            var errorDiv = document.getElementById('errorMessage');
+            errorDiv.innerText = "Both Lab Name and Description are required.";
+            errorDiv.style.display = 'block';
+            return; // Stop further execution
+        }
+
+        var form = document.getElementById('labForm');
+        var formData = new FormData(form);
+        var jsonObject = {};
+        formData.forEach(function(value, key){
+            jsonObject[key] = value;
+        });
+
+        fetch('/addLab', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(jsonObject),
+        }).then(response => {
+            return response.json();
+        }).then(data => {
+            // Display success message
+            if (data.successMessage) {
+                var successDiv = document.getElementById('successMessage');
+                successDiv.innerText = data.successMessage;
+                window.location.reload();
+                alert("Lab added successfully!");
+                successDiv.style.display = 'block';
+                var errorDiv = document.getElementById('errorMessage');
+                errorDiv.style.display = 'none';
+            }
+            // Display error message
+            if (data.errorMessage) {
+                var errorDiv = document.getElementById('errorMessage');
+                errorDiv.innerText = data.errorMessage;
+                errorDiv.style.display = 'block';
+                var successDiv = document.getElementById('successMessage');
+                successDiv.style.display = 'none';
+            }
+        }).catch(error => {
+            // Handle error
+            console.error('Error:', error);
+        });
+    }
+
+
+
+</script>
         <!-- Main Content -->
         <main>
             <div class="new-users">
                 <h2>Labs</h2>
                 <div class="user-list">
-                    <head>
-                        <title></title>
-                    </head>
-                    <body >
                     <h2>Add a lab</h2>
                     <form id="labForm">
                         <label for="labName">Lab Name:</label><br>
@@ -96,108 +147,41 @@
                         <label for="description">Description:</label><br>
                         <textarea id="description" name="description" required></textarea><br>
                         <button class="submit-button" type="button" onclick="addLab()">Add Lab</button>
-                        <div th:if="${successMessage}" style="color: green;">Booking successful!</div>
+                        <div id="successMessage" style="display: none; color: green;">Lab added successfully!</div>
+                        <div id="errorMessage" style="display: none; color: red;"></div>
                     </form>
-                    <div id="errorMessage" style="display: none; color: red;"></div>
-                    <script>
-                        function addLab() {
-                            var labNameInput = document.getElementById('labName');
-                            var descriptionInput = document.getElementById('description');
+                </div>
 
-                            // Check if the inputs are empty
-                            if (labNameInput.value.trim() === '' || descriptionInput.value.trim() === '') {
-                                var errorDiv = document.getElementById('errorMessage');
-                                errorDiv.innerText = "Both Lab Name and Description are required.";
-                                errorDiv.style.display = 'block';
-                                return; // Stop further execution
-                            }
-
-                            var form = document.getElementById('labForm');
-                            var formData = new FormData(form);
-                            var jsonObject = {};
-                            formData.forEach(function(value, key){
-                                jsonObject[key] = value;
-                            });
-
-                            fetch('/addLab', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify(jsonObject),
-                            }).then(response => {
-                                return response.json();
-                            }).then(data => {
-                                // Display success message
-                                if (data.successMessage) {
-                                    var successDiv = document.getElementById('successMessage');
-                                    successDiv.innerText = data.successMessage;
-                                    successDiv.style.display = 'block';
-                                    var errorDiv = document.getElementById('errorMessage');
-                                    errorDiv.style.display = 'none';
-                                }
-                                // Display error message
-                                if (data.errorMessage) {
-                                    var errorDiv = document.getElementById('errorMessage');
-                                    errorDiv.innerText = data.errorMessage;
-                                    errorDiv.style.display = 'block';
-                                    var successDiv = document.getElementById('successMessage');
-                                    successDiv.style.display = 'none';
-                                }
-                            }).catch(error => {
-                                // Handle error
-                                console.error('Error:', error);
-                            });
-                        }
-                    </script>
-
-                    <!-- Your form elements go here -->
-
-
-
-                    <div class="user-list">
-                        <head onload="setMinDate()">
-                            <title></title>
-                        </head>
-                        <body>
-                        <div>
-
-                            <div>
-                                <h2>All Labs</h2>
-                                <table>
-                                    <thead>
-                                    <tr>
-                                        <th>Lab Name</th>
-                                        <th>Description</th>
-                                        <th>Created By</th>
-                                        <th>Action</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="lab : ${labs}">
-                                        <td th:text="${lab.labName}"></td>
-                                        <td th:text="${lab.description}"></td>
-                                        <td th:text="${lab.userId}"></td>
-                                        <td>
-                                            <form th:action="@{/deleteLab}" method="post">
-                                                <input type="hidden" name="labId" th:value="${lab.id}" />
-                                                <button  class="cancel-button" type="submit">Delete</button>
-
-                                            </form>
-
-                                        </td>
-
-                                    </tr>
-                                    <div th:if="${DeletesuccessMessage}" style="color: green;">Lab deleted successfully</div>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                    </body >
+                <div class="user-list">
+                    <h2>All Labs</h2>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Lab Name</th>
+                            <th>Description</th>
+                            <th>Created By</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="lab : ${labs}">
+                            <td th:text="${lab.labName}"></td>
+                            <td th:text="${lab.description}"></td>
+                            <td th:text="${lab.userId}"></td>
+                            <td>
+                                <form th:action="@{/deleteLab}" method="post">
+                                    <input type="hidden" name="labId" th:value="${lab.id}" />
+                                    <button class="cancel-button" type="submit">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div th:if="${DeletesuccessMessage}" style="color: green;">Lab deleted successfully</div>
                 </div>
             </div>
         </main>
+
         <!-- Right Section -->
         <div class="right-section">
             <div class="nav">

@@ -106,19 +106,31 @@
                                 <td th:text="${booking.bookingDate}">Booking Date</td>
                                 <td th:text="${booking.lab}">Booking Date</td>
                                 <td>
+                                    <form id="approveForm" th:action="@{'/admin/bookings/' + ${booking.id} + '/approve'}" method="post" onsubmit="hideButton(event)">
+                                        <input type="hidden" name="_method" value="POST"/>
+                                        <button class="submit-button" type="submit">Approve</button>
+                                    </form>
+
                                     <form th:action="@{'/admin/bookings/' + ${booking.id} + '/cancel'}" th:method="post">
                                         <input type="hidden" name="_method" value="DELETE"/>
                                         <button  class="cancel-button" type="submit">Cancel</button>
                                     </form>
-                                    <form th:action="@{'/admin/bookings/' + ${booking.id} + '/approve'}" method="post">
-                                        <input type="hidden" name="_method" value="POST"/>
-                                        <button class="submit-button" type="submit">Approve</button>
-                                    </form>
+
+                                    <script>
+                                        function hideButton(event) {
+                                            // Disable the button associated with the event
+                                            const clickedButton = event.target.querySelector('button[type="submit"]');
+                                            clickedButton.disabled = true;
+                                            // Hide the button
+                                            clickedButton.style.display = 'none';
+                                        }
+                                    </script>
 
                                 </td>
                             </tr>
                             </tbody>
                         </table>
+
                     </div>
 
 

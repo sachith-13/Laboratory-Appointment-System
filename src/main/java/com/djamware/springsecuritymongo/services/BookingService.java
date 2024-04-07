@@ -17,7 +17,7 @@ public class BookingService {
     @Autowired
     public BookingService(BookingRepository bookingRepository, EmailService emailService) {
         this.bookingRepository = bookingRepository;
-        this.emailService = emailService; 
+        this.emailService = emailService;
     }
 
     public List<Booking> getAllBookings() {

@@ -77,70 +77,122 @@
                     <title>Payment Form</title>
                 </head>
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
                 <title>Payment Details</title>
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
                 <script type="text/javascript">
+
+
                     $(document).ready(function() {
                         $('#searchForm').submit(function(event) {
                             event.preventDefault();
                             var bookingId = $('#bookingId').val();
                             $.get('/payment/' + bookingId, function(amount) {
-                                console.log("Received amount:", amount); // Check if amount is received
-                                $('#paymentAmount').val(amount); // Set payment amount as value
+                                console.log("Received amount:", amount);
+                                $('#paymentAmount').val(amount);
                                 $('#bookingIdPayment').val(bookingId);
                             }).fail(function(xhr, status, error) {
-                                console.error("Error:", error); // Log any errors
-                                $('#paymentAmount').val('Error: ' + xhr.responseText); // Display error in the input field
+                                console.error("Error:", error);
+                                $('#paymentAmount').val('Error: ' + xhr.responseText);
                             });
                         });
 
-                        $('#paymentForm').submit(function(event) {
-                            event.preventDefault(); // Prevent the form from submitting normally
 
-                            // Perform your payment processing here, like sending an AJAX request to the server
-                            // Assume payment is successful for demonstration
-                            var paymentSuccessful = true;
-
-                            if (paymentSuccessful) {
-                                // Redirect to the test results page
-                                window.location.href = "/user/testresult"; // Replace "/test-results-page" with the actual URL of your test results page
-                            } else {
-                                // Display error message
-                                $('#errorMessage').text("Error processing payment. Please try again.");
-                            }
-                        });
                     });
+
+
+                    function submitPayment() {
+                        var bookingIdInput = document.getElementById('bookingIdPayment');
+                        var paymentAmountInput = document.getElementById('paymentAmount');
+                        var cardDetailsInput = document.getElementById('cardDetails');
+
+                        // Check if the inputs are empty
+                        if (bookingIdInput.value.trim() === '' || paymentAmountInput.value.trim() === '' || cardDetailsInput.value.trim() === '') {
+                            var errorDiv = document.getElementById('errorMessage');
+                            errorDiv.innerText = "All fields are required.";
+                            errorDiv.style.display = 'block';
+                            return;
+                        }
+
+                        var formData = new FormData();
+                        formData.append('bookingIdPayment', bookingIdInput.value.trim());
+                        formData.append('paymentAmount', paymentAmountInput.value.trim());
+                        formData.append('cardDetails', cardDetailsInput.value.trim());
+
+                        fetch('/payment/submit', {
+                            method: 'POST',
+                            body: formData,
+                        }).then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        }).then(data => {
+                            var successDiv = document.getElementById('successMessage');
+                            var errorDiv = document.getElementById('errorMessage');
+
+                            if (data.successMessage) {
+                                successDiv.innerText = data.successMessage;
+                                window.location.reload();
+                                alert("Payment added successfully!");
+                                successDiv.style.display = 'block';
+                                errorDiv.style.display = 'none';
+                            }
+
+                            if (data.errorMessage) {
+                                errorDiv.innerText = data.errorMessage;
+                                errorDiv.style.display = 'block';
+                                successDiv.style.display = 'none';
+                            }
+                        }).catch(error => {
+                            console.error('There was a problem with the fetch operation:', error);
+                            var errorDiv = document.getElementById('errorMessage');
+                            window.location.href = "/user/testresult"
+                            errorDiv.style.display = 'block';
+                            var successDiv = document.getElementById('successMessage');
+                            successDiv.style.display = 'none';
+                        });
+                    }
+
+
                 </script>
 
                 </head>
                 <body>
 
-                <h1>Your appoiment amount</h1>
+                <div>
+                    <h1>Payment Details</h1>
 
-                <form id="searchForm">
-                    <label for="bookingId">Enter Booking ID</label>
-                    <input type="text" id="bookingId" name="bookingId" required>
-                    <button class="submit-button" type="submit">Search</button>
+                    <form id="searchForm">
+                        <label for="bookingId">Enter Booking ID</label>
+                        <input type="text" id="bookingId" name="bookingId" required>
+                        <button class="submit-button" type="submit">Search</button>
 
+                    </form>
+
+                </div>
+
+
+
+
+                <div id="errorMessage" style="display: none; color: red;"></div>
+                <div id="successMessage" style="display: none; color: green;"></div>
+                <form id="paymentForm">
+                    <label for="bookingIdPayment">Booking ID:</label>
+                    <input type="text" id="bookingIdPayment" name="bookingIdPayment" readonly required><br><br>
+
+                    <label for="paymentAmount">Payment Amount:</label>
+                    <input type="text" id="paymentAmount" name="paymentAmount" readonly required><br><br>
+
+                    <label for="cardDetails">Card Details:</label>
+                    <input type="text" id="cardDetails" name="cardDetails" required><br><br>
+
+                    <button class="submit-button" type="button" onclick="submitPayment()">Pay</button>
                 </form>
-              <br>
-                <h2>Enter Card Details</h2>
-                <form id="paymentForm" action="/payment/submit" method="post">
-                    <label for="bookingIdPayment">Booking ID</label>
-                    <input type="text" id="bookingIdPayment" name="bookingIdPayment" readonly  required>
 
-                    <label for="paymentAmount">Payment Amount</label>
-                    <input type="text" id="paymentAmount" name="paymentAmount" readonly  required>
-
-                    <label for="cardDetails">Card Details</label>
-                    <input type="text" id="cardDetails" name="cardDetails" required>
-
-
-
-                    <input class="submit-button" type="submit" value="Pay">
-                </form>
-                <div id="errorMessage" class="error-message"></div>
-                <div id="successMessage" class="success-message"></div>
 
                 </body>
             </div>
@@ -148,7 +200,7 @@
     </main>
 
 
-    <!-- Right Section -->
+
     <div class="right-section">
         <div class="nav">
             <button id="menu-btn">
@@ -175,7 +227,7 @@
                 </div>
             </div>
 
-            <!-- End of Main Content -->
+
         </div>
     </div>
 

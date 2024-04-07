@@ -72,4 +72,20 @@ public class EmailService {
             throw new RuntimeException("Could not send email. Please try again later.", ex);
         }
     }
+
+
+    public void sendPaymentNotification(String userEmail, String bookingDetails) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(userEmail);
+        message.setSubject("Payment Approved");
+        message.setText("Dear User,\n\nYour Payment has been successfully. \nDetails: \n" + bookingDetails);
+
+        try {
+            emailSender.send(message);
+            logger.info("Email sent successfully to: {}", userEmail);
+        } catch (MailException ex) {
+            logger.error("Error occurred while sending email to {}: {}", userEmail, ex.getMessage());
+            throw new RuntimeException("Could not send email. Please try again later.", ex);
+        }
+    }
 }
